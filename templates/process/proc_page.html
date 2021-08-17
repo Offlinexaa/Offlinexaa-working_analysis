@@ -1,0 +1,47 @@
+{% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
+{% block the_title %}
+    Обработка данных
+{% endblock %}
+{% block main_content %}
+
+    <div style="margin: 20px">
+        <h3> Текущий набор данных </h3>
+<!--        <img src="{{current_img}}">-->
+        {{ plot_div|indent(4)|safe }}
+    </div>
+    <div style="margin-left: 20px">
+        <h3> Выберите действие </h3>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/process/describe/">Описательная статистика</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/process/regression_linear/">Линейная регрессия</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/process/sarima/">Регрессия по SARIMA</a>
+    </div>
+<!--    ======================================================================================================    -->
+<!--    С корреляцией проблемы. Вызваны, ориентировочно, особенностями работы представления процентных            -->
+<!--    переменных в sci-kit learn. TODO Замена на PyTorch или TensorFlow. Предпочтительнее выглядит PyTorch,     -->
+<!--    так как на малопоточных машинах работает быстрее. Экспериментирую с prophet                               -->
+<!--    <div style="margin: 10px">-->
+<!--        <a class="btn btn-primary btn-lg" href="/process/correlation_linear/">Линейная корреляция</a>-->
+<!--    </div>-->
+<!--    <div style="margin: 10px">-->
+<!--        <a class="btn btn-primary btn-lg" href="/process/correlation_matrix/">Матричная корреляция</a>-->
+<!--    </div>-->
+    <div style="margin: 10px"> <!-- Штука не надёжная. TODO нужен контроль содержимого ряда индексов. Контроль на -->
+                               <!-- некорректные заголовки: буква 'ё' - гарантия критической ошибки. UTF-8?       -->
+        <a class="btn btn-warning btn-lg" href="/process/auto_calculate_model/">
+            Подбор моделей SARIMA на текущий набор данных</a>
+    </div>
+
+
+
+{% endblock %}

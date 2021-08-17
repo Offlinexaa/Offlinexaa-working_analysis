@@ -1,0 +1,42 @@
+{% extends "shared/_layout.html" %}
+{% block the_title %}
+    Загрузка данных
+{% endblock %}
+{% block main_content %}
+
+    <h3> Выберите источник данных: </h3>
+    <div>
+
+        <form action="/loadpage/openfile/" method="post" style="margin: 20px;">
+            <div class="input-group mb-3">
+                <select name="mode" class="btn btn-primary btn-lg" aria-label=".form-select-lg">
+                    <option value="file">Из файла</option>
+                    <option value="url">По ссылке</option>
+<!--                    <option value="2">Из базы данных</option>-->
+                </select>
+            </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+<!--                        <span class="input-group-text" id="inputGroup-sizing-default">Открыть</span>-->
+                        <a href="/loadpage/selectfile/" type="button" class="btn btn-primary btn-lg">Выбрать</a>
+                    </div>
+                    <input type="text" name="path" class="form-control form-control-lg"
+                           aria-label=".form-control-lg" value="{{ file_path }}">
+                </div>
+            <div class="input-group mb-3">
+                <select name="format" class="btn btn-primary btn-lg" aria-label=".form-select-lg">
+                    {% for type in file_types %}
+                        <option value="{{type}}">*.{{type.upper()}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <button type="submit" class="btn btn-success btn-lg">Загрузить</button>
+            </div>
+        </form>
+        <div class="{{ form_text_mode }}">
+            {{ form_text }}
+        </div>
+    </div>
+
+{% endblock %}

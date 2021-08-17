@@ -1,0 +1,37 @@
+{% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
+{% block the_title %}
+    Витрина данных
+{% endblock %}
+{% block main_content %}
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light" style="padding-bottom: 0px;">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">Витрина данных</a>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="/visualize/grid/">Исходный ряд (МоМ)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/visualize/grid/basis">Базисный ряд (basis)</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Прогноз</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/visualize/grid/forecast/setup/">Настройка</a>
+                        <a class="dropdown-item active" href="/visualize/grid/forecast/">Графики</a>
+                        <a class="dropdown-item" href="/visualize/grid/forecast/basis">Базисные графики</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        {{ plot_div|indent(4)|safe }}
+    </div>
+
+{% endblock %}

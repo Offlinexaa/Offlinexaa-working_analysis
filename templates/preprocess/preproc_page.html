@@ -1,0 +1,42 @@
+{% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
+{% block the_title %}
+    Предварительная обработка данных
+{% endblock %}
+{% block main_content %}
+
+    <div style="margin: 20px">
+        <h3> Текущий набор данных </h3>
+<!--        <img src="{{current_img}}">-->
+        {{ plot_div|indent(4)|safe }}
+    </div>
+    <div style="margin-left: 20px">
+        <h3> Выберите действие </h3>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/dropstrings/">Удалить строки</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/transpouse/">Транспонировать данные</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/dropnull/">Обработка нулевых значений</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/deduplication/">Удалить дублирование данных</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/normalize/">Нормализовать данные</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/poping/">Преобразовать в период-к-периоду</a>
+    </div>
+    <div style="margin: 10px">
+        <a class="btn btn-primary btn-lg" href="/preprocess/differ/">Разность исходного ряда с рядом смещённым по периоду</a>
+    </div>
+
+{% endblock %}

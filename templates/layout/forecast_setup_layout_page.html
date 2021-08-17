@@ -1,0 +1,44 @@
+{% extends "shared/_layout.html" %}
+
+{% block the_title %}
+    Витрина данных
+{% endblock %}
+{% block main_content %}
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light" style="padding-bottom: 0px;">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">Витрина данных</a>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="/visualize/grid/">Исходный ряд (МоМ)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/visualize/grid/basis/">Базисный ряд (basis)</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">Прогноз</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item active" href="#">Настройка</a>
+                        <a class="dropdown-item disabled" href="#">Графики</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        <h3>Выбор модели для анализа ряда</h3>
+    </div>
+    <form>
+        {% for key in models.keys() %}
+            <div class="input-group mb-2 col-md-10" style="margin-left:20px;">
+                <div class="input-group-prepend">
+                    <a href="#" type="button" class="btn btn-primary btn-lg">{{key}}</a>
+                </div>
+                <input type="text" name="model_path_{{ key }}" class="form-control form-control-lg"
+                       aria-label=".form-control-lg" value={{models.get(key)}}>
+            </div>
+        {% endfor %}
+    </form>
+
+{% endblock %}

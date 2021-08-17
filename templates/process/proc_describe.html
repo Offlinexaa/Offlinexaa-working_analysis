@@ -1,0 +1,57 @@
+{% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
+{% block the_title %}
+    Описательный анализ
+{% endblock %}
+{% block main_content %}
+    <div>
+        {{ plot_div|indent(4)|safe }}
+    </div>
+    <div style="display: flex; flex-wrap: nowrap; overflow-x: auto; margin: 20px">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Столбец</th>
+                    <th>Всего</th>
+                    <th>Max</th>
+                    <th>Min</th>
+                    <th>Среднее</th>
+                    <th>Медиана</th>
+                    <th>Мода</th>
+                    <th>Стандартное отклонение</th>
+                    <th>Максимальное отклонение</th>
+                    <th>Квантиль 25%</th>
+                    <th>Квантиль 50%</th>
+                    <th>Квантиль 75%</th>
+                    <th>Стационарность</th>
+                </tr>
+            </thead>
+            {% for k,v in describe_stat.items() %}
+                <tr>
+                    <th>{{ k }}</th>
+                    <td>{{ v['count'] }}</td>
+                    <td>{{ v['max'] }}</td>
+                    <td>{{ v['min'] }}</td>
+                    <td>{{ v['mean'] }}</td>
+                    <td>{{ v['median'] }}</td>
+                    <td>{{ v['moda'] }}</td>
+                    <td>{{ v['std'] }}</td>
+                    <td>{{ v['variance'] }}</td>
+                    <td>{{ v['25%'] }}</td>
+                    <td>{{ v['50%'] }}</td>
+                    <td>{{ v['75%'] }}</td>
+                    <td>{{ v['stationary'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div>
+        <form action="/process/describe/apply/" method="POST">
+            <a href="/process/" style="margin-left: 10px" class="btn btn-danger btn-lg">Назад</a>
+        </form>
+    </div>
+{% endblock %}

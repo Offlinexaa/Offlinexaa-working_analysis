@@ -1,0 +1,43 @@
+{% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
+{% block the_title %}
+    Загрузка данных
+{% endblock %}
+{% block main_content %}
+    <div>
+<!--        <img src="{{ before_img }}">-->
+        {{ plot_div|indent(4)|safe }}
+    </div>
+    {% if acf_img %}
+        <div>
+            <img src="{{ acf_img }}" >
+        </div>
+    {% endif %}
+    <div>
+        <h3>
+            {{ stationary }}
+        </h3>
+    </div>
+    <div>
+        <form action="/preprocess/differ/apply/" method="POST">
+            <div style="margin: 10px;">
+                <select name="lag" class="btn btn-primary btn-lg margin-bottom: 10px" aria-label=".form-select-lg">
+                    {% for i in range(8) %}
+                        <option value="{{ i +1 }}">{{ i +1 }}</option>
+                    {% endfor %}
+                </select>
+                <select name="column_name" class="btn btn-primary btn-lg" aria-label=".form-select-lg" style="margin-left: 10px">
+                    {% for c in columns %}
+                        <option value="{{ c }}">{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn btn-success btn-lg" type="submit" style="margin: 10px;">Применить</button>
+            <a href="/preprocess/" class="btn btn-danger btn-lg">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

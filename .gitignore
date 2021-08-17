@@ -1,0 +1,9 @@
+# Specify filepatterns you want git to ignore.
+.idea
+services\__pycache__
+static\current_data
+static\models
+venv
+views\__pycache__
+*.7z
+*.xlsx

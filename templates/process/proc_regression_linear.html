@@ -1,0 +1,15 @@
+{% extends "shared/_layout.html" %}
+{% block the_title %}
+    Загрузка данных
+{% endblock %}
+{% block main_content %}
+    <div>
+        <img src="{{ before_img }}">
+    </div>
+    <div>
+        <form action="/process/regression_linear/apply/" method="POST">
+            <button class="btn btn-success btn-lg" type="submit" style="margin: 10px;">Применить</button>
+            <a href="/process/" class="btn btn-danger btn-lg">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

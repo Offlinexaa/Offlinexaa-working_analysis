@@ -1,0 +1,10 @@
+flask
+pandas
+numpy
+matplotlib
+statsmodels
+sklearn
+openpyxl
+pyqt5
+bokeh
+tk
