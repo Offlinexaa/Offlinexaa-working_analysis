@@ -18,6 +18,7 @@ def register_blueprints():
     from views import preprocview       # Часть, отвечающая за предварительную обработку
     from views import procview          # Часть, отвечающая за основную обработку
     from views import layoutview        # Часть, отвечающая за разложение на раздельные графики
+    from views import exportview        # Окно экспорта
 
     # app.register_blueprint(helloview.blueprint)
     app.register_blueprint(mainview.blueprint)
@@ -25,6 +26,7 @@ def register_blueprints():
     app.register_blueprint(preprocview.blueprint)
     app.register_blueprint(procview.blueprint)
     app.register_blueprint(layoutview.blueprint)
+    app.register_blueprint(exportview.blueprint)
 
 
 if __name__ == '__main__':

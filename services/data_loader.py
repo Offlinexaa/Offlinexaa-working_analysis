@@ -13,6 +13,10 @@ def load_workfile() -> pd.DataFrame:
     return load_data(session['workfile']+'.json', 'json')
 
 
+def load_basefile() -> pd.DataFrame:
+    return load_data(session['workfile']+'_basis.json', 'json')
+
+
 def load_data(file_name: str, file_type: str, index_col: str = None) -> pd.DataFrame:
     # TODO Проверить формат csv (у json проблемы с переиндексированием по дефолту)
     # Нагуглил костыль - используется scipy 2.1.13
