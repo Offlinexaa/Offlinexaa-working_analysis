@@ -1,4 +1,5 @@
 import flask
+import pandas
 from flask import session
 from services import data_loader
 from services import data_saver
@@ -85,16 +86,18 @@ def layout_grid_forecast_page():
     x_axis = buffer.index
     extended_axis = x_axis.to_list()
     # pprint(extended_axis)
-    for r in range(5):
-        extended_axis.append(extended_axis[-1] + datetime.timedelta(days=1))
-    extended_axis = extended_axis[-6:]
+    for r in range(12):
+        extended_axis.append(extended_axis[-1] + datetime.timedelta(days=31))
+    extended_axis = extended_axis[-13:]
     # pprint(extended_axis)
     colors = itertools.cycle(palette)
     figs = []
+    # new_buffer = pandas.DataFrame()
     for col in buffer.columns:
         if session['models'].get(col) is not None:
             predict_model = data_loader.load_model(session['models'].get(col))
-            prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 5), typ='levels')
+            prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 12), typ='levels')
+            # new_buffer = new_buffer.assign(str=prediction)
             fig = figure(background_fill_color="#fafafa", x_axis_type='datetime')
             fig.line(x_axis, buffer[col], color=next(colors), legend_label=col)
             fig.line(extended_axis, prediction, color='green', line_width=3, legend_label=('Прогноз для ' + col))
