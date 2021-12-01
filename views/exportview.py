@@ -1,4 +1,6 @@
 import flask
+import os
+from flask import session
 from services import data_saver
 from services import data_loader
 from services import etc
@@ -14,9 +16,12 @@ def export_page():
 
 @blueprint.route('/export/dataset/')
 def export_current_data():
-    init_frame = data_loader.load_workfile()
-    base_frame = data_loader.load_basefile()
-    filename = data_saver.show_save_dialog(filetypes=(('Microsoft Excel', '*.xlsx'), ))
-    init_frame.to_excel(filename, sheet_name='Исходный ряд', engine='openpyxl')
-    data_saver.append_to_excel(filename= filename, df= base_frame, sheet_name='Базисный ряд')
+    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
+                            + 'forecasted.xlsx')
+    data_frame = data_loader.load_data(file_name=filepath, file_type='xlsx')
+    filepath = data_saver.show_save_dialog(
+        'Сохранить файл данных',
+        (('Excel 2010', '*.xlsx'), ('Все файлы', '*.*'))
+    )
+    data_saver.save_to_excel(data_frame, filepath)
     return flask.redirect('/export/')

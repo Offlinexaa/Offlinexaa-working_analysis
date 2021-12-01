@@ -80,7 +80,7 @@ def layout_grid_forecast_setup_per_column(column_name: str):
 @blueprint.route('/visualize/grid/forecast/')
 def layout_grid_forecast_page():
     # import statsmodels.api as sm
-    import datetime
+    import datetime, os
     # from pprint import pprint
     buffer = data_loader.load_workfile()
     x_axis = buffer.index
@@ -92,25 +92,31 @@ def layout_grid_forecast_page():
     # pprint(extended_axis)
     colors = itertools.cycle(palette)
     figs = []
-    # new_buffer = pandas.DataFrame()
+    new_series = []
     for col in buffer.columns:
         if session['models'].get(col) is not None:
             predict_model = data_loader.load_model(session['models'].get(col))
             prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 12), typ='levels')
-            # new_buffer = new_buffer.assign(str=prediction)
+            new_series.append(buffer[col].append(pandas.Series(prediction)).rename(col))
             fig = figure(background_fill_color="#fafafa", x_axis_type='datetime')
             fig.line(x_axis, buffer[col], color=next(colors), legend_label=col)
             fig.line(extended_axis, prediction, color='green', line_width=3, legend_label=('Прогноз для ' + col))
             fig.legend.location = 'top_left'
             # fig.grid.click_policy="hide"
             figs.append(fig)
-    n_cols = int(round(math.sqrt(len(figs))))
+
+    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
+                            + 'forecasted.xlsx')
+    new_buffer = pandas.concat(new_series, axis=1, keys=[s.name for s in new_series])
+    data_saver.save_to_excel(new_buffer, filepath)
+
     # Debug info
     # ----------
     # print(n_cols)
     # ----------
 
     # Компоновка через layouts из bokeh
+    n_cols = int(round(math.sqrt(len(figs))))
     grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()

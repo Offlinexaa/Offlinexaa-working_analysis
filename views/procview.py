@@ -92,7 +92,7 @@ def proc_regression_sarima_auto(column_name: str):
     buffer = data_loader.load_workfile()
     buffer = buffer[column_name]
 
-    print('Column name = ' + column_name)
+    # print('Column name = ' + column_name)
     params = processor.adopt_arima(buffer)
 
     result = processor.arima_regression(buffer, params.get('p'), params.get('d'), params.get('q'), 0)
@@ -127,6 +127,8 @@ def proc_auto_calculate_model():
 
     buffer = data_loader.load_workfile()
 
+    etc.init_model()
+
     for column_name in buffer.columns:
         work_column = buffer[column_name]
         params = processor.adopt_arima(work_column)
@@ -134,6 +136,7 @@ def proc_auto_calculate_model():
         filepath = os.path.join(os.getcwd(), 'static', 'models', str(session['uid']) + '_'
                                 + column_name + '.mdl')
         data_saver.save_model(result.get('model'), filepath)
+        etc.update_model_dict(column_name, filepath)
 
     return redirect("/process/")
 

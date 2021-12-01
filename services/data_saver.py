@@ -20,8 +20,8 @@ def save_data(data: pandas.DataFrame, postfix: str = ''):
     # data.to_excel(session['workfile'], engine='openpyxl')
 
 
-def save_to_excel(data: pandas.DataFrame, filepath: str = 'unnamed.xlsx'):
-    data.to_excel(filepath)
+def save_to_excel(data: pandas.DataFrame, filepath: str = 'unnamed.xlsx', index: bool = True, header: bool = True):
+    data.to_excel(filepath, index=index, header=header)
 
 
 def save_model(model: sm.ARIMAResults, filepath: str = ''):

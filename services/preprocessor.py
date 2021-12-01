@@ -130,8 +130,8 @@ def count_single_sko(a: float, b: float) -> float:
 
 
 def count_sko(a: pd.Series, b: pd.Series) -> float:
-    print('Length A = ' + str(len(a.to_list())))
-    print('Length B = ' + str(len(b.to_list())))
+    # print('Length A = ' + str(len(a.to_list())))
+    # print('Length B = ' + str(len(b.to_list())))
     if len(a.to_list()) != len(b.to_list()):
         raise IndexError("Серии разной длинны")
     length = len(a.to_list())

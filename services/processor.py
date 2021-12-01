@@ -89,9 +89,9 @@ def arima_regression(data: pd.Series, p: int = 0, d: int = 0, q: int = 0, test_l
     else:
         axis_x = data.index
         axis_x_pred = axis_x.to_list()
-        for r in range(5):
+        for r in range(11):
             axis_x_pred.append(axis_x_pred[-1] + datetime.timedelta(days=1))
-        axis_x_pred = axis_x_pred[-6:]
+        axis_x_pred = axis_x_pred[-12:]
         fig.line(axis_x, data, line_width=2, legend_label='Исходные данные')
 
     model = sm.tsa.arima.ARIMA(data, order=(p, d, q)).fit()
