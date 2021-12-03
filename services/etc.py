@@ -1,10 +1,14 @@
+import os
+
 import pandas as pd
 from flask import session
 from bokeh.plotting import figure
 from bokeh.resources import INLINE
 from bokeh.embed import components
 from bokeh.palettes import Category20_10 as palette
+from pathlib import Path
 import itertools
+
 
 def clear_session(name: str = None) -> bool:
     if name is None:
@@ -73,3 +77,10 @@ def update_model_dict(column_name: str, filepath: str):
     models = session['models']
     models.update({column_name: filepath})
     session['models'] = models
+
+
+def check_and_create_dirs():
+    curr_dir = os.path.join(os.getcwd(), 'static', 'current_data')
+    model_dir = os.path.join(os.getcwd(), 'static', 'models')
+    Path(curr_dir).mkdir(parents=True, exist_ok=True)
+    Path(model_dir).mkdir(parents=True, exist_ok=True)
