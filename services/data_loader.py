@@ -9,8 +9,8 @@ def main() -> None:
     pass    # TODO: добавить отладчик и проверку работоспособности
 
 
-def load_workfile() -> pd.DataFrame:
-    return load_data(session['workfile']+'.json', 'json')
+def load_workfile(postfix: str = '') -> pd.DataFrame:
+    return load_data(session['workfile'] + postfix + '.json', 'json')
 
 
 def load_basefile() -> pd.DataFrame:

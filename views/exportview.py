@@ -16,12 +16,18 @@ def export_page():
 
 @blueprint.route('/export/dataset/')
 def export_current_data():
-    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
-                            + 'forecasted.xlsx')
-    data_frame = data_loader.load_data(file_name=filepath, file_type='xlsx')
+    # filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
+    #                         + 'forecasted.xlsx')
+    # data_frame = data_loader.load_data(file_name=filepath, file_type='xlsx')
+    data_frame = data_loader.load_workfile('_forecasted')
     filepath = data_saver.show_save_dialog(
         'Сохранить файл данных',
         (('Excel 2010', '*.xlsx'), ('Все файлы', '*.*'))
     )
     data_saver.save_to_excel(data_frame, filepath)
+    try:
+        basis_frame = data_loader.load_workfile('_basis_forecasted')
+        data_saver.append_to_excel(filepath, basis_frame, sheet_name='Базисные значения')
+    except FileNotFoundError:
+        print('!!!======  Нет файла прогноза базисов. ======!!!')
     return flask.redirect('/export/')
