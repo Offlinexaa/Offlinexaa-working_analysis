@@ -19,7 +19,7 @@ def main() -> None:
 
 
 # =========== Описательная статистика ==========
-def describe(data: pd.DataFrame):
+def describe(data: pd.DataFrame) -> dict:
     import statistics
     from services import preprocessor
 
@@ -54,7 +54,7 @@ def describe(data: pd.DataFrame):
         new_val.update({'stationary': stationary})
 
         # Обновляем результирующий словарь.
-        result.update({col:new_val})
+        result.update({col: new_val})
     return result
 # ==============================================
 
