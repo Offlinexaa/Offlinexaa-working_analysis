@@ -21,17 +21,17 @@ def export_current_data():
         'Сохранить файл данных',
         (('Excel 2010', '*.xlsx'), ('Все файлы', '*.*'))
     )
-    data_saver.save_to_excel(data_frame, filepath)
+    data_saver.save_to_excel(data_frame.round(3), filepath)
     try:
         data_frame = data_loader.load_workfile()
         describe_stat = pd.DataFrame(processor.describe(data_frame))
-        data_saver.append_to_excel(filepath, describe_stat, sheet_name='Описательные статистики')
+        data_saver.append_to_excel(filepath, describe_stat.round(3), sheet_name='Описательные статистики')
     except Exception:
         print('Ошибка с описательной статистикой')
 
     try:
         basis_frame = data_loader.load_workfile('_basis_forecasted')
-        data_saver.append_to_excel(filepath, basis_frame, sheet_name='Базисные значения')
+        data_saver.append_to_excel(filepath, basis_frame.round(3), sheet_name='Базисные значения')
     except FileNotFoundError:
         print('!!!======  Нет файла прогноза базисов. ======!!!')
     return flask.redirect('/export/')
