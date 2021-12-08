@@ -103,26 +103,14 @@ def get_base_column(data: pd.DataFrame, column_name: str, mode: str ='abs') -> l
 
 # ========= Пересчет датафрейма в базисный вариант ===========
 def df_to_base(data: pd.DataFrame, mode: str = 'abs') -> pd.DataFrame:
-    # from pprint import pprint
     for column_name in data.columns:
-        # ======= debug ======
-        # print('working on: ' + column_name)
-        # ====================
         data[column_name] = get_base_column(data, column_name, mode)
-        #data.rename(columns={column_name: column_name+'_base'}, inplace= True)
-    # ======= debug ======
-    # pprint(data.head(5))
-    # pprint(data.tail(5))
-    # ====================
     return data
 #============================================================
 
 
 # ============ Расчет среднеквадратичной ошибки =============
 def count_single_sko(a: float, b: float) -> float:
-    import math
-    # a = abs(a)
-    # b = abs(b)
     if a > b:
         return abs(a - b)
     else:
@@ -130,8 +118,6 @@ def count_single_sko(a: float, b: float) -> float:
 
 
 def count_sko(a: pd.Series, b: pd.Series) -> float:
-    # print('Length A = ' + str(len(a.to_list())))
-    # print('Length B = ' + str(len(b.to_list())))
     if len(a.to_list()) != len(b.to_list()):
         raise IndexError("Серии разной длинны")
     length = len(a.to_list())

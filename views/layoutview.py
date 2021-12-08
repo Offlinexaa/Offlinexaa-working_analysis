@@ -133,43 +133,46 @@ def layout_grid_forecast_basis_page():
                                  plot_script=plot.get('script'), plot_div=plot.get('div'),
                                  js_resources=plot.get('js_res'), css_resources=plot.get('css_res'))
 
-    # from pprint import pprint
-    # import datetime
-    # buffer = data_loader.load_data(session['workfile']+'_basis.json', file_type='json', index_col='index')
-    # x_axis = buffer.index
-    # extended_axis = x_axis.to_list()
-    # # pprint(extended_axis)
-    # for r in range(11):
-    #     extended_axis.append(extended_axis[-1] + datetime.timedelta(days=1))
-    # extended_axis = extended_axis[-12:]
-    # # pprint(extended_axis)
-    # colors = itertools.cycle(palette)
-    # figs = []
-    # # pprint(buffer.columns)
-    # for col in buffer.columns:
-    #     if session['models'].get(col) is not None:
-    #
-    #         # predict_model = data_loader.load_model(session['models'].get(col))
-    #         # prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 11), typ='levels')
-    #         # fig = figure(background_fill_color="#fafafa", x_axis_type='datetime')
-    #         # fig.line(x_axis, buffer[col], color=next(colors), legend_label=col)
-    #         # fig.line(extended_axis, prediction, color='green', line_width=3, legend_label=('Прогноз для ' + col))
-    #         # fig.legend.location = 'top_left'
-    #         # fig.grid.click_policy="hide"
-    #         figs.append(fig)
-    # n_cols = int(round(math.sqrt(len(figs))))
-    # # Debug info
-    # # ----------
-    # # print(n_cols)
-    # # ----------
-    #
-    # # Компоновка через layouts из bokeh
-    # grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
-    # js_resources = INLINE.render_js()
-    # css_resources = INLINE.render_css()
-    # script, div = components(grid)
-    # return flask.render_template("layout/grid_forecast_page.html", plot_script=script, plot_div=div,
-    #                              js_resources=js_resources, css_resources=css_resources)
+
+@blueprint.route('/visualize/grid/forecast/nnet')
+def layout_grid_forecast_nnet():
+    import datetime
+    import os
+    from services import nnet
+    buffer = data_loader.load_workfile()
+    x_axis = buffer.index
+    extended_axis = x_axis.to_list()
+    for r in range(11):
+        extended_axis.append(extended_axis[-1] + datetime.timedelta(days=31))
+    extended_axis = extended_axis[-12:]
+    colors = itertools.cycle(palette)
+    figs = []
+    new_series = []
+    for col in buffer.columns:
+        predict_models = nnet.init_models_pool()
+
+        # prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 11), typ='levels')
+        new_series.append(buffer[col].append(pandas.Series(prediction)).rename(col))
+        fig = figure(background_fill_color="#fafafa", x_axis_type='datetime')
+        fig.line(x_axis, buffer[col], color=next(colors), legend_label=col)
+        fig.line(extended_axis, prediction, color='green', line_width=3, legend_label=('Прогноз для ' + col))
+        fig.legend.location = 'top_left'
+        figs.append(fig)
+
+    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
+                            + 'forecasted.xlsx')
+    new_buffer = pandas.concat(new_series, axis=1, keys=[s.name for s in new_series])
+    new_buffer = pandas.DataFrame(new_buffer[1:])
+    data_saver.save_data(new_buffer, '_forecasted')
+
+    # Компоновка через layouts из bokeh
+    n_cols = int(round(math.sqrt(len(figs))))
+    grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+    script, div = components(grid)
+    return flask.render_template("layout/grid_forecast_page.html", plot_script=script, plot_div=div,
+                                 js_resources=js_resources, css_resources=css_resources)
 
 
 # ================ Компановка вручную ===================
