@@ -101,8 +101,6 @@ def layout_grid_forecast_page():
             # fig.grid.click_policy="hide"
             figs.append(fig)
 
-    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
-                            + 'forecasted.xlsx')
     new_buffer = pandas.concat(new_series, axis=1, keys=[s.name for s in new_series])
     new_buffer = pandas.DataFrame(new_buffer[1:])
     data_saver.save_data(new_buffer, '_forecasted')
@@ -149,21 +147,19 @@ def layout_grid_forecast_nnet():
     figs = []
     new_series = []
     for col in buffer.columns:
-        predict_models = nnet.init_models_pool()
-
-        # prediction = predict_model.predict(start=len(x_axis), end=(len(x_axis) + 11), typ='levels')
+        train_data = nnet.prepare_dataset(buffer[col])
+        model, mae = nnet.get_best_model(train_data['x'], train_data['y'])
+        prediction = nnet.predict(buffer[col], model)
         new_series.append(buffer[col].append(pandas.Series(prediction)).rename(col))
-        fig = figure(background_fill_color="#fafafa", x_axis_type='datetime')
+        fig = figure(background_fill_color="#fafafa", x_axis_type='datetime', title=str(model) + f' Ошибка: {mae}%')
         fig.line(x_axis, buffer[col], color=next(colors), legend_label=col)
         fig.line(extended_axis, prediction, color='green', line_width=3, legend_label=('Прогноз для ' + col))
         fig.legend.location = 'top_left'
         figs.append(fig)
 
-    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']) + '_'
-                            + 'forecasted.xlsx')
     new_buffer = pandas.concat(new_series, axis=1, keys=[s.name for s in new_series])
     new_buffer = pandas.DataFrame(new_buffer[1:])
-    data_saver.save_data(new_buffer, '_forecasted')
+    data_saver.save_data(new_buffer, '_forecasted_weird')
 
     # Компоновка через layouts из bokeh
     n_cols = int(round(math.sqrt(len(figs))))
@@ -171,7 +167,7 @@ def layout_grid_forecast_nnet():
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
     script, div = components(grid)
-    return flask.render_template("layout/grid_forecast_page.html", plot_script=script, plot_div=div,
+    return flask.render_template("layout/grid_forecast_nnet_page.html", plot_script=script, plot_div=div,
                                  js_resources=js_resources, css_resources=css_resources)
 
 

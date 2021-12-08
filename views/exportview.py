@@ -30,6 +30,12 @@ def export_current_data():
         print('!!!======  Нет файла прогноза базисов. ======!!!')
 
     try:
+        nn_frame = data_loader.load_workfile('_forecasted_weird')
+        data_saver.append_to_excel(filepath, nn_frame, sheet_name='Прогноз по моделям машинного обучения')
+    except FileNotFoundError:
+        print('!!!======  Нет файла прогноза машинным обучением. ======!!!')
+
+    try:
         data_frame = data_loader.load_workfile()
         describe_stat = pd.DataFrame(processor.describe(data_frame))
         data_saver.append_to_excel(filepath, describe_stat.round(3), sheet_name='Описательные статистики')
