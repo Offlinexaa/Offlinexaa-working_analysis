@@ -79,7 +79,7 @@ def layout_grid_forecast_setup_per_column(column_name: str):
 # TODO: вынести во внешний модуль функционал
 @blueprint.route('/visualize/grid/forecast/')
 def layout_grid_forecast_page():
-    import datetime, os
+    import datetime
     buffer = data_loader.load_workfile()
     x_axis = buffer.index
     extended_axis = x_axis.to_list()
@@ -107,6 +107,8 @@ def layout_grid_forecast_page():
 
     # Компоновка через layouts из bokeh
     n_cols = int(round(math.sqrt(len(figs))))
+    if n_cols > 4:
+        n_cols = 4
     grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
@@ -135,7 +137,6 @@ def layout_grid_forecast_basis_page():
 @blueprint.route('/visualize/grid/forecast/nnet')
 def layout_grid_forecast_nnet():
     import datetime
-    import os
     from services import nnet
     buffer = data_loader.load_workfile()
     x_axis = buffer.index
@@ -163,6 +164,8 @@ def layout_grid_forecast_nnet():
 
     # Компоновка через layouts из bokeh
     n_cols = int(round(math.sqrt(len(figs))))
+    if n_cols > 4:
+        n_cols = 4
     grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()

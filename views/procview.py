@@ -50,7 +50,30 @@ def proc_desc_page():
 # TODO: Проблемы с представлением данных в процентах и долях. Пока отключено.
 @blueprint.route("/process/regression_linear/")
 def proc_regression_linear():
-    return flask.render_template('process/proc_regression_linear.html')
+    frames = [data_loader.load_workfile()]
+    plot = etc.make_single_plot(frames)
+    return flask.render_template('process/proc_regression_linear.html', columns=session['columns'],
+                                 init_test_len=12,
+                                 plot_script=plot.get('script'), plot_div=plot.get('div'),
+                                 js_resources=plot.get('js_res'), css_resources=plot.get('css_res'))
+
+
+@blueprint.route("/process/regression_linear/apply/", methods=['POST'])
+def proc_regression_linear_apply():
+
+    column = flask.request.form.get('column_name')
+    predict_len = int(flask.request.form.get('test_data_length'))
+
+    buffer = data_loader.load_workfile()
+    buffer = buffer[column]
+
+    result = processor.linear_regression(buffer, predict_len)
+
+    return flask.render_template('process/proc_regression_linear.html',
+                                 plot_script=result.get('script'), plot_div=result.get('div'),
+                                 save_disabled='', js_resources=result.get('js_res'),
+                                 css_resources=result.get('css_res'), columns=[column],
+                                 init_test_len=predict_len)
 # =============================================
 
 

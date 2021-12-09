@@ -1,15 +1,38 @@
 {% extends "shared/_layout.html" %}
+{% block additional_css %}
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+{% endblock %}
 {% block the_title %}
-    Загрузка данных
+    Прогноз линейная регрессия
 {% endblock %}
 {% block main_content %}
     <div>
-        <img src="{{ before_img }}">
+        {{ plot_div|indent(4)|safe }}
     </div>
     <div>
         <form action="/process/regression_linear/apply/" method="POST">
-            <button class="btn btn-success btn-lg" type="submit" style="margin: 10px;">Применить</button>
-            <a href="/process/" class="btn btn-danger btn-lg">Отмена</a>
+            <div style="margin: 10px">
+                <select name="column_name" class="btn btn-primary btn-lg" aria-label=".form-select-lg">
+                    {% for c in columns %}
+                        <option value="{{ c }}">{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group row" style="margin: 10px">
+                <label for="test_size" class="col-sm-2 col-form-label">Глубина прогноза</label>
+                <div class="col-sm-6">
+                        <input type="text" name="test_data_length" class="form-control form-control-lg"
+                                aria-label=".form-control-lg" value={{ init_test_len }}>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-success btn-lg" type="submit" style="margin: 10px;">Применить</button>
+<!--                <a href="/process/regression_linear/save" class="btn btn-primary btn-lg {{save_disabled}}"-->
+<!--                   style="margin: 10px;">Сохранить модель</a>-->
+                <a href="/process/" class="btn btn-danger btn-lg" style="margin: 10px;">Отмена</a>
+            </div>
         </form>
     </div>
 {% endblock %}
