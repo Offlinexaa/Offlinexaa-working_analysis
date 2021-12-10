@@ -5,6 +5,7 @@ static/current_data
 static/models
 venv
 views/__pycache__
+*__pycache__
 *.7z
 *.xlsx
 *.mdl

@@ -67,7 +67,7 @@ def proc_regression_linear_apply():
     buffer = data_loader.load_workfile()
     buffer = buffer[column]
 
-    result = processor.linear_regression(buffer, predict_depth=predict_len)
+    result = processor.linear_regression(buffer, sample_len=24, predict_depth=predict_len)
 
     return flask.render_template('process/proc_regression_linear.html',
                                  plot_script=result.get('script'), plot_div=result.get('div'),

@@ -71,7 +71,7 @@ def linear_regression(data: pd.Series, sample_len: int = 24, predict_depth: int 
     from datetime import timedelta
     from pprint import pprint
 
-    train_data = prepare_dataset(data)
+    train_data = prepare_dataset(data, sample_len=sample_len)
     x_train = train_data['x'][:-10]
     x_test = train_data['x'][-10:]
     y_train = train_data['y'][:-10]
