@@ -78,17 +78,17 @@ def proc_regression_linear_apply():
 
 
 # ============ Регрессия ARIMA ===============
-@blueprint.route("/process/sarima/")
+@blueprint.route("/process/arima/")
 def proc_regression_sarima():
     frames = [data_loader.load_workfile()]
     plot = etc.make_single_plot(frames)
-    return flask.render_template('process/proc_regression_sarima.html', columns=session['columns'],
+    return flask.render_template('process/proc_regression_arima.html', columns=session['columns'],
                                  init_p=0, init_d=0, init_q=0, init_test_len=0,
                                  plot_script=plot.get('script'), plot_div=plot.get('div'),
                                  js_resources=plot.get('js_res'), css_resources=plot.get('css_res'))
 
 
-@blueprint.route("/process/sarima/apply/", methods=['POST'])
+@blueprint.route("/process/arima/apply/", methods=['POST'])
 def proc_regression_sarima_apply():
 
     column = flask.request.form.get('column_name')
@@ -103,14 +103,14 @@ def proc_regression_sarima_apply():
     result = processor.arima_regression(buffer, p, d, q, test_len)
     data_saver.save_model(result.get('model'))
 
-    return flask.render_template('process/proc_regression_sarima.html',
+    return flask.render_template('process/proc_regression_arima.html',
                                  plot_script=result.get('script'), plot_div=result.get('div'),
                                  save_disabled='', js_resources=result.get('js_res'),
                                  css_resources=result.get('css_res'), columns=[column],
                                  init_p=p, init_d=d, init_q=q, init_test_len=test_len)
 
 
-@blueprint.route("/process/sarima/autotune/<column_name>")
+@blueprint.route("/process/arima/autotune/<column_name>")
 def proc_regression_sarima_auto(column_name: str):
     buffer = data_loader.load_workfile()
     buffer = buffer[column_name]
@@ -122,7 +122,7 @@ def proc_regression_sarima_auto(column_name: str):
 
     data_saver.save_model(result.get('model'))
 
-    return flask.render_template('process/proc_regression_sarima.html',
+    return flask.render_template('process/proc_regression_arima.html',
                                  plot_script=result.get('script'), plot_div=result.get('div'),
                                  save_disabled='', js_resources=result.get('js_res'),
                                  css_resources=result.get('css_res'), columns=[column_name],
@@ -132,13 +132,13 @@ def proc_regression_sarima_auto(column_name: str):
 
 
 # ============ Сохранение модели ==============
-@blueprint.route("/process/sarima/save/")
+@blueprint.route("/process/arima/save/")
 def proc_regression_sarima_save():
     filename = data_saver.show_save_dialog(title='Сохранить прогнозную модель',
                                            filetypes=(('Модель', '*.mdl'), ('Все файлы', '*.*')))
     model = data_loader.load_model()
     data_saver.save_model(model, filename)
-    return redirect("/process/sarima/")
+    return redirect("/process/arima/")
 # =============================================
 # ---------------------------------------------
 

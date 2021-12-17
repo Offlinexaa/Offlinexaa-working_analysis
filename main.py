@@ -8,7 +8,7 @@ app.secret_key = 'd2yi346f^^&giwhdwsfjdlwefwekfh23r423rwe'
 
 def main():
     register_blueprints()               # регистрируем подготовленные шаблоны
-    app.run(debug=True)                 # Запускаем сервер
+    app.run(debug=False)                 # Запускаем сервер
 
 
 def register_blueprints():

@@ -5,14 +5,14 @@
     {{ plot_script|indent(4)|safe }}
 {% endblock %}
 {% block the_title %}
-    Прогноз SARIMA
+    Прогноз ARIMA
 {% endblock %}
 {% block main_content %}
     <div>
         {{ plot_div|indent(4)|safe }}
     </div>
     <div>
-        <form action="/process/sarima/apply/" method="POST">
+        <form action="/process/arima/apply/" method="POST">
             <div style="margin: 10px">
                 <select name="column_name" class="btn btn-primary btn-lg" aria-label=".form-select-lg">
                     {% for c in columns %}
@@ -55,8 +55,8 @@
             </div>
             <div>
                 <button class="btn btn-success btn-lg" type="submit" style="margin: 10px;">Применить</button>
-                <a href="/process/sarima/autotune/{{ columns[0] }}" class="btn btn-primary btn-lg" style="margin: 10px;">Подобрать</a>
-                <a href="/process/sarima/save" class="btn btn-primary btn-lg {{save_disabled}}"
+                <a href="/process/arima/autotune/{{ columns[0] }}" class="btn btn-primary btn-lg" style="margin: 10px;">Подобрать</a>
+                <a href="/process/arima/save" class="btn btn-primary btn-lg {{save_disabled}}"
                    style="margin: 10px;">Сохранить модель</a>
                 <a href="/process/" class="btn btn-danger btn-lg" style="margin: 10px;">Отмена</a>
             </div>

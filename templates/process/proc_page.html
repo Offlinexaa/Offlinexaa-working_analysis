@@ -11,7 +11,6 @@
 
     <div style="margin: 20px">
         <h3> Текущий набор данных </h3>
-<!--        <img src="{{current_img}}">-->
         {{ plot_div|indent(4)|safe }}
     </div>
     <div style="margin-left: 20px">
@@ -24,23 +23,11 @@
         <a class="btn btn-primary btn-lg" href="/process/regression_linear/">Линейная регрессия</a>
     </div>
     <div style="margin: 10px">
-        <a class="btn btn-primary btn-lg" href="/process/sarima/">Регрессия по SARIMA</a>
+        <a class="btn btn-primary btn-lg" href="/process/arima/">Регрессия по ARIMA</a>
     </div>
-<!--    ======================================================================================================    -->
-<!--    С корреляцией проблемы. Вызваны, ориентировочно, особенностями работы представления процентных            -->
-<!--    переменных в sci-kit learn. TODO Замена на PyTorch или TensorFlow. Предпочтительнее выглядит PyTorch,     -->
-<!--    так как на малопоточных машинах работает быстрее. Экспериментирую с prophet                               -->
-<!--    <div style="margin: 10px">-->
-<!--        <a class="btn btn-primary btn-lg" href="/process/correlation_linear/">Линейная корреляция</a>-->
-<!--    </div>-->
-<!--    <div style="margin: 10px">-->
-<!--        <a class="btn btn-primary btn-lg" href="/process/correlation_matrix/">Матричная корреляция</a>-->
-<!--    </div>-->
-    <div style="margin: 10px"> <!-- Штука не надёжная. TODO нужен контроль содержимого ряда индексов. Контроль на -->
-                               <!-- некорректные заголовки: буква 'ё' - гарантия критической ошибки. UTF-8?       -->
-                               <!-- UPD: В окружении Windows какой-то другой UTF-8. В виндах ломается сразу всё.  -->
+    <div style="margin: 10px"> 
         <a class="btn btn-warning btn-lg" href="/process/auto_calculate_model/">
-            Подбор моделей SARIMA на текущий набор данных</a>
+            Подбор моделей ARIMA на текущий набор данных</a>
     </div>
 
 
