@@ -5,10 +5,6 @@ import statsmodels.tsa.arima.model as sm
 import urllib.request
 
 
-def main() -> None:
-    pass    # TODO: добавить отладчик и проверку работоспособности
-
-
 def load_workfile(postfix: str = '') -> pd.DataFrame:
     return load_data(session['workfile'] + postfix + '.json', 'json')
 
@@ -18,17 +14,15 @@ def load_basefile() -> pd.DataFrame:
 
 
 def load_data(file_name: str, file_type: str, index_col: str = None) -> pd.DataFrame:
-    # TODO Проверить формат csv (у json проблемы с переиндексированием по дефолту)
-    # Нагуглил костыль - используется scipy 2.1.13
-    file_path = os.path.abspath(file_name)          # Получем полный путь к файлу
-    if not os.path.exists(file_path):               # Если такого файла нет
-        raise IOError('File is not existed')        # вызываем исключение по этому поводу
-    if file_type == 'csv':                          # В зависимости от указанного формата
-        return pd.read_csv(file_path, index_col=index_col).dropna() #.to_json()     # считываем файлы разной функцией из
-    elif file_type == 'xlsx':                       # модуля pandas
-        return pd.read_excel(file_path, index_col=index_col, engine='openpyxl').dropna() #.to_json()
+    file_path = os.path.abspath(file_name)
+    if not os.path.exists(file_path):
+        raise IOError('File is not existed')
+    if file_type == 'csv':
+        return pd.read_csv(file_path, index_col=index_col).dropna()
+    elif file_type == 'xlsx':
+        return pd.read_excel(file_path, index_col=index_col, engine='openpyxl').dropna()
     elif file_type == 'json':
-        return pd.read_json(file_path).dropna() #.to_json()
+        return pd.read_json(file_path).dropna()
 
 
 def url_load(url: str, filepath: str) -> pd.DataFrame:
