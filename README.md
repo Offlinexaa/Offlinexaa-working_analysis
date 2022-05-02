@@ -37,18 +37,29 @@ pip install -r requirements.txt
 Запустить проект:
 
 ```
-python3
+python3 main.py
 ```
 
 # Требования
 
 Python 3.5 или выше
 
+Google chrome 86 или выше
+
 # Применяемые технологии
 
 Пользовательский интерфейс: Flask, jinja2, Bootstrap (4.6), Tkinter
-Обработка данных: Scikit-learn, Statsmodels
+
+Обработка данных: Scikit-learn, Statsmodels, Pandas, Numpy
+
 Визуализация данных: Matplotlib, Bokeh
+
+# Планы по доработке
+
+- Приведение к стандарту по PEP8
+- Добавить строки документации
+- Вынести во внешний модуль компановку графиков для Bokeh
+- Заменить реализацию append_to_excel в модуле data_saver на свою
 
 # Примечание
 
