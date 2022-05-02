@@ -60,15 +60,26 @@ def init_models_pool() -> list:
     """Инициализация моделей нейронных сетей и других методов
     машинного обучения."""
     mlp_model0 = MLPRegressor()
-    mlp_model1 = MLPRegressor(max_iter=1000, hidden_layer_sizes=(200, 200, 200))
+    mlp_model1 = MLPRegressor(
+        max_iter=1000,
+        hidden_layer_sizes=(200, 200, 200)
+    )
     ard_model0 = ARDRegression()
     ard_model1 = ARDRegression(n_iter=1000)
     ada_model = AdaBoostRegressor(n_estimators=150)
     hub_model = HuberRegressor(epsilon=1.05, max_iter=2000)
-    return [mlp_model0, mlp_model1, ard_model0, ard_model1, ada_model, hub_model]
+    return [mlp_model0, mlp_model1,
+            ard_model0, ard_model1,
+            ada_model,
+            hub_model]
 
 
-def predict(data: pd.Series, model, sample_len: int = 24, depth: int = 12) -> list:
+def predict(
+    data: pd.Series,
+    model,
+    sample_len: int = 24,
+    depth: int = 12
+) -> list:
     """
     Мысль: возвращаем список вместе с прогнозными значениями,
     после чего собираем из него Series с добавлением оси Х в
@@ -79,7 +90,10 @@ def predict(data: pd.Series, model, sample_len: int = 24, depth: int = 12) -> li
         past_column = []
         for j in range(sample_len):
             past_column.append(f'past_{j}')
-        current = pd.DataFrame(data_list[-sample_len:], index=past_column).transpose()
+        current = pd.DataFrame(
+            data_list[-sample_len:],
+            index=past_column
+        ).transpose()
         prediction = model.predict(current)
         data_list.append(round(*prediction, 3))
     return data_list[-depth:]

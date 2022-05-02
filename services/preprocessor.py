@@ -1,23 +1,6 @@
 import pandas as pd
 import copy
 
-# =========== Процедура отладки, в релизе не нужна ===============
-def main() -> None:
-    import pprint
-    import tkinter as tk
-    from tkinter import filedialog
-    from services.data_loader import load_data
-
-    root = tk.Tk()
-    root.withdraw()
-    filename = filedialog.askopenfilename()
-    root.destroy()
-
-    data = load_data(filename, 'xlsx', index_col='index')
-    new_data = df_to_base(data)
-
-# ===============================================================
-
 
 # ============ Удаление дубликатов =================
 # Адаптер к стандартной функции pandas
@@ -28,14 +11,17 @@ def deduplicate(data: pd.DataFrame) -> pd.DataFrame:
 # ==================================================
 
 
-# ====================== Преобразование в период-к-периоду ========================
-def reshape_to_period_over_period(data: pd.DataFrame, column: str) -> pd.DataFrame:
+# ====================== Преобразование в период-к-периоду ====================
+def reshape_to_period_over_period(
+    data: pd.DataFrame,
+    column: str
+) -> pd.DataFrame:
     data_in = copy.deepcopy(data)
     data_pop = data_in.to_dict('series')
     first = True
     old_v = 0
     for k, v in data_pop[column].items():
-        if first == True:
+        if first:
             old_v = v
             data_pop[column].update({k: 100.0})
             first = False
@@ -43,7 +29,7 @@ def reshape_to_period_over_period(data: pd.DataFrame, column: str) -> pd.DataFra
             data_pop[column].update({k: 100 + 100*(v - old_v)/old_v})
             old_v = v
     return pd.DataFrame(data_pop)
-# =================================================================================
+# =============================================================================
 
 
 # ============== Нормализация ряда ====================
@@ -84,7 +70,11 @@ def differ_x(data: pd.DataFrame, lag: int) -> pd.DataFrame:
 
 
 # ======== Пересчет столбца в базисный показатель ============
-def get_base_column(data: pd.DataFrame, column_name: str, mode: str ='abs') -> list:
+def get_base_column(
+    data: pd.DataFrame,
+    column_name: str,
+    mode: str = 'abs'
+) -> list:
     col = data[column_name]
     new_col = []
     first = True
@@ -106,7 +96,7 @@ def df_to_base(data: pd.DataFrame, mode: str = 'abs') -> pd.DataFrame:
     for column_name in data.columns:
         data[column_name] = get_base_column(data, column_name, mode)
     return data
-#============================================================
+# ============================================================
 
 
 # ============ Расчет среднеквадратичной ошибки =============
@@ -126,6 +116,11 @@ def count_sko(a: pd.Series, b: pd.Series) -> float:
         result += count_single_sko(a[x], b[x])
     return result/length
 # ===========================================================
+
+
+# =========== Процедура отладки, в релизе не нужна ===============
+def main() -> None:
+    pass
 
 
 if __name__ == '__main__':

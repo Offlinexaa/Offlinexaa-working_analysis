@@ -4,33 +4,45 @@ from flask import session
 import statsmodels.tsa.arima.model as sm
 from openpyxl import load_workbook
 
-def main():
-    pass # TODO: добавить отладчик и проверку работоспособности
-
 
 def init_save_path():
-    filepath = os.path.join(os.getcwd(), 'static', 'current_data', str(session['uid']))
+    filepath = os.path.join(
+        os.getcwd(),
+        'static',
+        'current_data',
+        str(session['uid'])
+    )
     session['workfile'] = filepath
 
 
-# Данные сохраняем в JSON. Так исключается проблема с движком openpyxl.
-# TODO: нужна функция экспорта в формат excel после смены движка. Желательно новый (xlsx).
 def save_data(data: pandas.DataFrame, postfix: str = ''):
     data.to_json(session['workfile'] + postfix + '.json')
-    # data.to_excel(session['workfile'], engine='openpyxl')
 
 
-def save_to_excel(data: pandas.DataFrame, filepath: str = 'unnamed.xlsx', index: bool = True, header: bool = True):
+def save_to_excel(
+    data: pandas.DataFrame,
+    filepath: str = 'unnamed.xlsx',
+    index: bool = True,
+    header: bool = True
+):
     data.to_excel(filepath, index=index, header=header)
 
 
 def save_model(model: sm.ARIMAResults, filepath: str = ''):
     if filepath == '':
-        filepath = os.path.join(os.getcwd(), 'static', 'models', str(session['uid']) + '_model.mdl')
+        filepath = os.path.join(
+            os.getcwd(),
+            'static',
+            'models',
+            str(session['uid']) + '_model.mdl'
+        )
     model.save(filepath)
 
 
-def show_save_dialog(title: str = 'Сохранить файл', filetypes=(('Все файлы', '*.*'),)) -> str:
+def show_save_dialog(
+    title: str = 'Сохранить файл',
+    filetypes=(('Все файлы', '*.*'),)
+) -> str:
     import tkinter as tk
     from tkinter import filedialog
     root = tk.Tk()
@@ -45,8 +57,8 @@ def show_save_dialog(title: str = 'Сохранить файл', filetypes=(('В
 # ==== !!! Взято со stackoverflow.com
 # TODO: заменить на свою реализацию
 def append_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
-                       truncate_sheet=False,
-                       **to_excel_kwargs):
+                    truncate_sheet=False,
+                    **to_excel_kwargs):
     """
     Append a DataFrame [df] to existing Excel file [filename]
     into [sheet_name] Sheet.
@@ -62,8 +74,8 @@ def append_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
                      in the existing DF and write to the next row...
     @param truncate_sheet: truncate (remove and recreate) [sheet_name]
                            before writing DataFrame to Excel file
-    @param to_excel_kwargs: arguments which will be passed to `DataFrame.to_excel()`
-                            [can be a dictionary]
+    @param to_excel_kwargs: arguments which will be passed to
+                            `DataFrame.to_excel()` [can be a dictionary]
     @return: None
 
     Usage examples:
@@ -123,3 +135,11 @@ def append_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
 
     # save the workbook
     writer.save()
+
+
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    main()

@@ -41,11 +41,21 @@ def make_single_plot(frames: list, name: str = 'Текущие данные') ->
         axis_x = df_v.index
         if isinstance(df_v, pd.DataFrame):
             for column in df_v.columns:
-                fig.line(axis_x, df_v[column], line_width=2, color=next(colors))
+                fig.line(
+                    axis_x,
+                    df_v[column],
+                    line_width=2,
+                    color=next(colors)
+                )
         elif isinstance(df_v, pd.Series):
             fig.line(axis_x, df_v, line_width=2, color=next(colors))
     script, div = components(fig)
-    return {'js_res': INLINE.render_js(), 'css_res': INLINE.render_css(), 'script': script, 'div': div}
+    return {
+        'js_res': INLINE.render_js(),
+        'css_res': INLINE.render_css(),
+        'script': script,
+        'div': div
+    }
 
 
 def make_grid_plot(data: pd.DataFrame) -> dict:
@@ -63,12 +73,21 @@ def make_grid_plot(data: pd.DataFrame) -> dict:
     n_cols = int(round(math.sqrt(len(figs))))
     if n_cols > 4:
         n_cols = 4
-    grid = gridplot(figs, ncols=n_cols, sizing_mode="stretch_both", plot_width=250, plot_height=250)
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
+    grid = gridplot(
+        figs,
+        ncols=n_cols,
+        sizing_mode="stretch_both",
+        plot_width=250,
+        plot_height=250
+    )
     script, div = components(grid)
 
-    return {'js_res': INLINE.render_js(), 'css_res': INLINE.render_css(), 'script': script, 'div': div}
+    return {
+        'js_res': INLINE.render_js(),
+        'css_res': INLINE.render_css(),
+        'script': script,
+        'div': div
+    }
 
 
 def update_model_dict(column_name: str, filepath: str):
