@@ -44,6 +44,26 @@ python3 main.py
 
 Python 3.5 или выше
 
+Flask
+
+pandas
+
+numpy
+
+sklearn
+
+statsmodels
+
+openpyxl
+
+pyqt5
+
+tk
+
+bokeh
+
+matplotlib
+
 Google chrome 86 или выше
 
 ### Применяемые технологии
