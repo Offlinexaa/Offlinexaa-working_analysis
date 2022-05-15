@@ -66,7 +66,7 @@ def linear_regression(
     predict_depth: int = 12
 ):
     from sklearn.linear_model import LinearRegression
-    from sklearn.metrics import mean_absolute_error
+    # from sklearn.metrics import mean_absolute_error
     from services.nnet import prepare_dataset
     from bokeh.plotting import figure
     from bokeh.resources import INLINE
@@ -74,14 +74,14 @@ def linear_regression(
     from datetime import timedelta
 
     train_data = prepare_dataset(data, sample_len=sample_len)
-    x_train = train_data['x'][:-10]
-    x_test = train_data['x'][-10:]
-    y_train = train_data['y'][:-10]
-    y_test = train_data['y'][-10:]
+    x_train = train_data['x']
+    # x_test = train_data['x'][-10:]
+    y_train = train_data['y']
+    # y_test = train_data['y'][-10:]
     model = LinearRegression()
     model.fit(x_train, y_train)
-    prediction = model.predict(x_test)
-    mae = mean_absolute_error(prediction, y_test)
+    # prediction = model.predict(x_test)
+    # mae = mean_absolute_error(prediction, y_test)
 
     fig = figure(
         title='Результат настройки модели',

@@ -5,7 +5,11 @@ from services import data_loader
 from services import etc
 from services import processor
 
-blueprint = flask.Blueprint("Export_page", __name__, template_folder='templates')
+blueprint = flask.Blueprint(
+    "Export_page", __name__,
+    template_folder='templates'
+)
+
 
 @blueprint.route('/export/')
 def export_page():
@@ -25,20 +29,32 @@ def export_current_data():
 
     try:
         basis_frame = data_loader.load_workfile('_basis_forecasted')
-        data_saver.append_to_excel(filepath, basis_frame.round(3), sheet_name='Базисные значения')
+        data_saver.append_to_excel(
+            filepath,
+            basis_frame.round(3),
+            sheet_name='Базисные значения'
+        )
     except FileNotFoundError:
         print('!!!======  Нет файла прогноза базисов. ======!!!')
 
     try:
         nn_frame = data_loader.load_workfile('_forecasted_weird')
-        data_saver.append_to_excel(filepath, nn_frame, sheet_name='Прогноз по моделям машинного обучения')
+        data_saver.append_to_excel(
+            filepath,
+            nn_frame,
+            sheet_name='Прогноз по моделям машинного обучения'
+        )
     except FileNotFoundError:
         print('!!!======  Нет файла прогноза машинным обучением. ======!!!')
 
     try:
         data_frame = data_loader.load_workfile()
         describe_stat = pd.DataFrame(processor.describe(data_frame))
-        data_saver.append_to_excel(filepath, describe_stat.round(3), sheet_name='Описательные статистики')
+        data_saver.append_to_excel(
+            filepath,
+            describe_stat.round(3),
+            sheet_name='Описательные статистики'
+        )
     except Exception:
         print('Ошибка с описательной статистикой')
     return flask.redirect('/export/')

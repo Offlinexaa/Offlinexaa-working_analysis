@@ -35,8 +35,6 @@ def reshape_to_period_over_period(
 # ============== Нормализация ряда ====================
 # TODO: Разобраться с проблемами при индексации по
 #  времени - ряд превращается в прямую y=1
-#  UPD 11.10.2020: Требуется альтернативная библиотека.
-#  Создан форк с исправлением бага, но в мейн он не добавлен.
 def auto_normalize(data: pd.DataFrame, col_name: str = None) -> pd.DataFrame:
     from sklearn import preprocessing
 
@@ -51,7 +49,7 @@ def auto_normalize(data: pd.DataFrame, col_name: str = None) -> pd.DataFrame:
 
 
 # ============== Определение стационарности ряда =============
-# Обощённый тест Дикки-Фуллера на наличие единичных корней
+# Обобщённый тест Дикки-Фуллера на наличие единичных корней
 def is_stationary(data: pd.DataFrame) -> bool:
     from statsmodels import api as sm
 

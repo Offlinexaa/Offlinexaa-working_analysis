@@ -3,6 +3,7 @@ import uuid
 
 blueprint = flask.Blueprint("hello", __name__, template_folder='templates')
 
+
 @blueprint.route("/")
 def main_page():
     flask.session['uid'] = uuid.uuid4()

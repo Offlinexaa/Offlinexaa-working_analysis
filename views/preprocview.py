@@ -6,7 +6,11 @@ from services import preprocessor
 from services import etc
 import os
 
-blueprint = flask.Blueprint("preprocess", __name__, template_folder='templates')
+blueprint = flask.Blueprint(
+    "preprocess",
+    __name__,
+    template_folder='templates'
+)
 
 
 # ========= Заглавная страница ===============
@@ -16,9 +20,13 @@ def preproc_page():
         return flask.redirect('/loadpage/')
     frames = [data_loader.load_workfile()]
     plot = etc.make_single_plot(frames)
-    return flask.render_template('preprocess/preproc_page.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'))
+    return flask.render_template(
+        'preprocess/preproc_page.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res')
+    )
 
 
 # ===========================================
@@ -29,9 +37,13 @@ def preproc_page():
 def prep_dedup_page():
     frames = [data_loader.load_workfile()]
     plot = etc.make_single_plot(frames)
-    return flask.render_template('preprocess/pre_dedup.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'))
+    return flask.render_template(
+        'preprocess/pre_dedup.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res')
+    )
 
 
 @blueprint.route("/preprocess/deduplication/apply/", methods=['POST'])
@@ -48,15 +60,23 @@ def apply_deduplicate():
 def prep_poping_page():
     frames = [data_loader.load_workfile()]
     plot = etc.make_single_plot(frames)
-    return flask.render_template('preprocess/pre_poping.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'), columns=session['columns'])
+    return flask.render_template(
+        'preprocess/pre_poping.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res'),
+        columns=session['columns']
+    )
 
 
 @blueprint.route("/preprocess/poping/apply/", methods=['POST'])
 def apply_poping():
     buffer = data_loader.load_workfile()
-    new_data = preprocessor.reshape_to_period_over_period(buffer, flask.request.form.get('column_name'))
+    new_data = preprocessor.reshape_to_period_over_period(
+        buffer,
+        flask.request.form.get('column_name')
+    )
     data_saver.save_data(new_data)
     return flask.redirect("/preprocess/poping/")
 # ===================================================
@@ -70,17 +90,23 @@ def pre_norm_page():
     columns = ['Все']
     for col in session['columns']:
         columns.append(col)
-    return flask.render_template('preprocess/pre_norm.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'), columns=columns)
+    return flask.render_template(
+        'preprocess/pre_norm.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res'),
+        columns=columns
+    )
 
 
 @blueprint.route("/preprocess/normalize/apply/", methods=['POST'])
 def apply_normalize():
     buffer = data_loader.load_workfile()
-    # TODO Глючит с таймштампом. Передаем весь набор данных, позже добавлю выбор колонок.
-    #  UPD 11.10.2020: таймштамп не поддерживается в этом месте - приводит к n=0
-    new_data = preprocessor.auto_normalize(buffer, flask.request.form.get('column_name'))
+    new_data = preprocessor.auto_normalize(
+        buffer,
+        flask.request.form.get('column_name')
+    )
     data_saver.save_data(new_data)
     return flask.redirect("/preprocess/normalize/")
 
@@ -93,9 +119,14 @@ def apply_normalize():
 def pre_diff_page():
     frames = [data_loader.load_workfile()]
     plot = etc.make_single_plot(frames)
-    return flask.render_template('preprocess/pre_differ.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'), columns=session['columns'])
+    return flask.render_template(
+        'preprocess/pre_differ.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res'),
+        columns=session['columns']
+    )
 
 
 @blueprint.route("/preprocess/differ/apply/", methods=['POST'])
@@ -114,23 +145,44 @@ def diff_apply():
     else:
         stationary = 'Ряд нестационарный'
 
-    plot = etc.make_single_plot([buffer, buffer_diff], name='Разность рядов. Сдвиг ' + lag)
+    plot = etc.make_single_plot(
+        [buffer, buffer_diff],
+        name='Разность рядов. Сдвиг ' + lag
+    )
 
-# ============= Подготовка и дамп на диск графического представления автокорреляции =============
+# ============= Подготовка и дамп на диск графического ==============
+#                     представления автокорреляции
     # TODO: Вынести во внешний модуль
     fig2 = plt.figure(figsize=(12, 8))
     ax1 = fig2.add_subplot(211)
-    fig2 = sm.graphics.tsa.plot_acf(buffer.values.squeeze(), lags=lag_count, ax=ax1)
+    fig2 = sm.graphics.tsa.plot_acf(
+        buffer.values.squeeze(),
+        lags=lag_count,
+        ax=ax1
+    )
     ax2 = fig2.add_subplot(212)
     fig2 = sm.graphics.tsa.plot_pacf(buffer, lags=lag_count, ax=ax2)
-    plt.savefig(os.path.join(os.getcwd(), 'static', 'img', str(session['uid']) + '_acf'))
-# ===============================================================================================
+    plt.savefig(
+        os.path.join(
+            os.getcwd(),
+            'static',
+            'img',
+            str(session['uid']) + '_acf'
+        )
+    )
+# ===================================================================
     acf_img = os.path.join('/static', 'img', str(session['uid']) + '_acf.png')
 
-    return flask.render_template('preprocess/pre_differ.html', plot_script=plot.get('script'),
-                                 plot_div=plot.get('div'), js_resources=plot.get('js_res'),
-                                 css_resources=plot.get('css_res'), columns=[col_name], acf_img=acf_img,
-                                 stationary=stationary)
+    return flask.render_template(
+        'preprocess/pre_differ.html',
+        plot_script=plot.get('script'),
+        plot_div=plot.get('div'),
+        js_resources=plot.get('js_res'),
+        css_resources=plot.get('css_res'),
+        columns=[col_name],
+        acf_img=acf_img,
+        stationary=stationary
+    )
 # ===================================================
 
 
